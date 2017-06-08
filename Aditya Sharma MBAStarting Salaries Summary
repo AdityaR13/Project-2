@@ -1,0 +1,85 @@
+   ANALYSIS SUMMARY   
+
+By the summary statistics and boxplots mean, median, standard deviation, variance and outliers are observed.
+With the help of correlation matrix and corrgram, hypotheses of mutual independence ( Significance of Relationships ) can be drawn. These variables can be tested further via t test etc.
+
+I have created a columns mbavg which contains average value of summer and fall semester grades.
+Now a new data frame is made which will be useful to test hypotheses on Salary , so for understanding salary a subset is made where data is available for those students who got placed and had given salary data.
+
+By visualizing boxplots individually it can be interpreted that age, work years has few upper outliers and gmat_quant ,gmat_verbal, gmat_total, f_avg, mbavg have some lower outliers. Salary has some both type of outliers. 
+
+By scatterplots it can be inferred that age-work_years , gmat_total- gmat_tpc , salary-(work years,age,gmat tot,mbavg) are correlated and form linearity with each other.
+
+Further with the help of corrgram and correlation matrix correlation can be observed.
+       Age- work years, salary
+       Sex-none
+       Gmat_tot- gmat_qpc, gmat_vpc, gmat_tpc
+       Gmat_qpc- gmat_tot
+       S_avg- f_avg, mbavg, quarter
+       Firstlang-none
+       Satis- none                 etc.
+
+
+ Regression model on salary (placed)  - 
+ WHO GOT HOW MUCH SALARY?
+
+Initially a model can be generated for salary where variables are taken maximum but removing few based on out previous hypothesis testing.
+so first model is created with predictive variables 
+age + work_yrs + mbavg + gmat_tot + sex + satis + gmat_vpc + gmat_qpc + gmat_tpc + s_avg + f_avg  
+
+And    Adjusted R-squared:  0.2546  is noted.
+Then I removed one by one variable in step wise ,removing the highest p value variable ( insignificant beta coeff ) and keep doing regression until maximum adjustable R-squared is obtained. Which is actually best fit to regression. 
+After multiple steps I got  Adjusted R-squared:  0.2848 which is maximum obtained ,further removing variable decreased it again.
+I have taken my original equation diff and then checked adjusted r squared and even after step by step removal of variables and checked adjusted r squared. 
+So best values was   0.2848 
+
+And linear regression equation is ( for the best fit ) =
+Salary = 39383 + 2791.1*Age + 513.2*gmat_vpc + 822.3*gmat_qpc -  
+       1383.8*gmat_tpc
+ 
+Residual standard error: 15110 on 98 degrees of freedom
+Multiple R-squared:  0.3129,	Adjusted R-squared:  0.2848 
+
+It can be interpreted that salary is of placed students is depending on Age , Gmat verbal quant and total percentiles. 
+For eg;  There would be 2791.1 usd increment in salary if age is 
+        increased by one year
+        Model accounts for 31.3% of variance in salary.
+        Average error in prediction in salary will be 15110
+
+
+
+ PART 2 
+ 
+COMPARE THOSE WHO GOT A JOB WITH THOSE WHO DID NOT GET A JOB? 
+IDENTIFY WHY?
+
+
+For analyzing those who got job and those who didn’t, I have to add a column (job) in both placed and unplaced data set.
+I have assigned value 1 to placed and 0 to not placed and combined both data sets into one new called ‘jobdata’
+And I changed this variable class numeric to factor because I had to make this variable categorical for logistic regression.
+After making contingency tables and running some t test choosing binary variable job with others I analyzed that only age is playing significant importance on job.
+
+Logistic regression on Job ( placed or not ) -
+
+Initially I have taken many variables into account for my step by step logistic regression. Which are      age + work_yrs + mbavg + gmat_tot + sex + satis + gmat_vpc + gmat_qpc + gmat_tpc + s_avg + f_avg 
+
+And    Residual deviance: 244.47   on 182 degrees of freedom  is noted.
+Then I removed step-wise one by one variable in ,removing the highest p value variable ( insignificant beta coeff ) and keep doing regression until maximum Residual deviance. Which is actually best fit for regression
+
+After multiple steps I got   Residual deviance: 255.52  on 190  degrees of freedom
+Which is almost maximum what I could get . Even through removing one more variable s_avg would give me better fit . But then alone age is left as explanatory variable. So I stopped here.
+
+And Logistic regression equation is ( for one less to best fit ) =
+Job ( YES or NO ) = 1.35 - 0.12*age + 0.65*s_avg
+
+ Null deviance: 266.68  on 192  degrees of freedom
+Residual deviance: 255.52  on 190  degrees of freedom
+AIC: 261.52
+Number of Fisher Scoring iterations: 4
+
+
+It can be interpreted that Job (Y/N) is depending on almost age and little bit on s_avg.
+For eg;  yes goes to 1 , no goes to 0
+        Decrease in age by one year will increase chances of job by
+         0.12 factor  
+    [  Actual Best fit -  job = 3.06 - 0.11*age ]
